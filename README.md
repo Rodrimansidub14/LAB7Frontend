@@ -15,3 +15,4 @@ El siguiente proyecto es el desarrollo frontend de un blog de Elden Ring en una 
 - [React](https://reactjs.org/)
 
 ## Link a la pagina
+- [Elden Ring Blog] (https://arpanetos.lol/lab7/22611)
