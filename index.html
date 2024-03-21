@@ -1,0 +1,293 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8" />
+    <title>Elden Ring Blog</title>
+    <script src="https://unpkg.com/react@17/umd/react.development.js"></script>
+    <script src="https://unpkg.com/react-dom@17/umd/react-dom.development.js"></script>
+    <script src="https://unpkg.com/@babel/standalone/babel.min.js"></script>
+    <script src="https://unpkg.com/prop-types/prop-types.min.js"></script>
+    <script src="https://ajax.googleapis.com/ajax/libs/webfont/1.6.26/webfont.js"></script>
+    <script src="https://fonts.googleapis.com/css2?family=Alegreya+Sans+SC:ital,wght@0,100;0,300;0,400;0,500;0,700;0,800;0,900;1,100;1,300;1,400;1,500;1,700;1,800;1,900&display=swap"></script>
+</head>
+
+<body>
+    <div id="root"></div>
+    <script type="text/babel">
+        const { PropTypes } = window;
+
+        WebFont.load({
+            google: {
+                families: ["Alegreya Sans SC:400,500,700", "sans-serif"],
+            },
+        });
+
+        const styles = {
+            fullPageBackground: {
+                backgroundImage: "url(res/ERlogo3.jpg)",
+                backgroundSize: "cover", 
+                backgroundRepeat: "no-repeat",
+                backgroundPosition: "center center",
+                width: "100vw", 
+                height: "100vh", 
+                position: "fixed",
+
+                top: 0,
+                left: 0,
+                zIndex: -1, 
+            },
+            textStyle: {
+                color: "#c9a227", 
+                fontFamily: "Alegreya Sans Sc, sans-serif",
+                FontWeight: "500",
+                fontStyle: "normal",
+            },
+
+            alertTextStyle: {
+                color: "#CE2727", 
+                fontFamily: "comic Sans, sans-serif",
+                FontWeight: "500",
+                fontStyle: "normal",
+                fontSize: "21px",
+                textAlign: "center"
+            },
+            ptextStyle: {
+                color: "#FAFAD2",
+                fontFamily: "Optima, sans-serif",
+                fontSize: "18px",
+            },
+
+            container: {
+                display: "flex",
+                justifyContent: "flex-start",
+                alignItems: "flex-start",
+                zIndex: 1,
+                padding: "20px",
+                gap: "40px",
+            },
+            sidebar: {
+                width: "20%",
+                display: "flex",
+                flexDirection: "column",
+                zIndex: 1,
+                gap: "20px",
+            },
+            mainContent: {
+                width: "65%",
+                display: "flex",
+
+                flexDirection: "column",
+                zIndex: 1,
+                gap: "20px",
+            },
+
+            OUTbox: {
+                border: "5px solid gold",
+                borderRadius: "3px",
+                zIndex: 1,
+                padding: "10px",
+                overflowy: "auto",
+                maxHeight: "400px",
+            },
+
+            INbox: {
+                border: "0.2px solid gold",
+                borderRadius: "5px",
+                zIndex: 0,
+                padding: "10px",
+            },
+            post: {
+                zIndex: 1,
+                padding: "5px",
+                marginBottom: "5px",
+            },
+            postContent: {
+                border: "0px solid gold",
+                color: "#FAFAD2",
+                zIndex: 0,
+                padding: "3px",
+                marginBottom: "3px",
+            },
+        };
+
+        const HeaderComponent = () => (
+            <header style={styles.OUTbox}>
+                <h1 style={{ ...styles.textStyle, ...styles.INbox }}>
+                    Elden Ring Blog
+                </h1>
+                <p style={styles.ptextStyle}>
+                    Welcome to the realm of the Elden Lord
+                </p>
+            </header>
+        );
+
+        const ContactInfoComponent = () => (
+            <div style={{ ...styles.OUTbox, ...styles.contactInfo }}>
+                <h2 style={{ ...styles.textStyle, ...styles.INbox }}>Contact Info</h2>
+                <p style={styles.ptextStyle}>Rodrigo Mansilla</p>
+                <p style={styles.ptextStyle}><strong>Email:</strong> man22611@uvg.edu.gt</p>
+                <p style={styles.ptextStyle}>
+                    <a href="https://github.com/Rodrimansidub1" target="_blank" rel="noopener noreferrer" style={{ color: '#c9a227' }}>Github</a>
+                </p>
+            </div>
+        );
+
+
+        const ResourcesComponent = () => (
+            <div style={{ ...styles.OUTbox, ...styles.resources }}>
+                <h2 style={{ ...styles.textStyle, ...styles.INbox }}>Resources</h2>
+                <ul style={{ listStyleType: 'none', padding: 0 }}>
+                    <li style={styles.ptextStyle}>
+                        <a href="https://roundtablehold.net" target="_blank" rel="noopener noreferrer" style={{ color: '#c9a227' }}>
+                            Roundtable Hold
+                        </a>
+                    </li>
+                    <li style={styles.ptextStyle}>
+                        <a href="https://mapgenie.io/elden-ring" target="_blank" rel="noopener noreferrer" style={{ color: '#c9a227' }}>
+                            Map Genie - Elden Ring
+                        </a>
+                    </li>
+                </ul>
+            </div>
+        );
+
+
+        const PostComponent = ({ title, content }) => (
+            <div style={styles.post}>
+                <h3 style={{ ...styles.textStyle, ...styles.INbox }}>{title}</h3>
+
+                <div style={{ ...styles.postContent, ...styles.ptextStyle }}>
+                    {content}
+                </div>
+            </div>
+        );
+
+        PostComponent.propTypes = {
+            title: PropTypes.string.isRequired,
+            content: PropTypes.string.isRequired,
+        };
+
+        const SidebarComponent = ({ onSearch }) => (
+            <aside style={styles.sidebar}>
+                <input
+                    type="text"
+                    placeholder="Search by post ID..."
+                    onChange={e => onSearch(e.target.value)}
+                    style={{ width: '90%', padding: '10px', marginBottom: '20px' }}
+                />
+                <ContactInfoComponent />
+                <ResourcesComponent />
+
+            </aside>
+        );
+
+        const BlogPostsComponent = ({ posts }) => (
+            <div style={styles.postsContainer}>
+                {posts.map((post) => (
+                    <PostComponent
+                        key={post.id}
+                        title={post.title}
+                        content={post.content}
+                    />
+                ))}
+            </div>
+        );
+
+        BlogPostsComponent.propTypes = {
+            posts: PropTypes.arrayOf(
+                PropTypes.shape({
+                    id: PropTypes.number.isRequired,
+                    title: PropTypes.string.isRequired,
+                    content: PropTypes.string.isRequired,
+                })
+            ).isRequired,
+        };
+        const LoadingComponent = () => (
+            <div style={{ textAlign: 'center', position: 'relative' }}>
+                <img
+                    src="res/malenia.gif"
+                    alt="Loading..."
+                    style={{ width: '50%', margin: 'auto' }}
+                />
+                <h1 style={styles.alertTextStyle}>Loading please wait...</h1>
+            </div>
+        );
+
+
+
+        const App = () => {
+            const [posts, setPosts] = React.useState([]);
+            const [loading, setLoading] = React.useState(true);
+            const [error, setError] = React.useState(null);
+            const [searchTerm, setSearchTerm] = React.useState('');
+
+
+            React.useEffect(() => {
+                const fetchPosts = async () => {
+                    setLoading(true);
+                    try {
+                        const response = await fetch('http://127.0.0.1:5000/posts');
+                        if (!response.ok) {
+                            throw new Error(`HTTP error! Status: ${response.status}`);
+                        }
+                        const data = await response.json();
+                        setPosts(data);
+                    } catch (error) {
+                        console.error('Failed to fetch posts:', error);
+                        setError(error.message);
+                    } finally {
+                        setLoading(false);
+                    }
+                };
+
+                fetchPosts();
+            }, []);
+
+            const scrollableStyle = {
+                maxHeight: "300px",
+                overflowY: "auto",
+            };
+
+            const filteredPosts = searchTerm
+                ? posts.filter(post => post.id.toString().startsWith(searchTerm))
+                : posts;
+            const noPostsGif = 'res/malenia.gif';
+            return (
+                <div style={styles.fullPageBackground}>
+                    <div style={styles.container}>
+                        <SidebarComponent />
+                        <main style={styles.mainContent}>
+                            <HeaderComponent />
+                            <div style={styles.OUTbox}>
+                                <h2 style={{ ...styles.textStyle, ...styles.INbox }}>
+                                    Blog posts
+                                </h2>
+                                {loading ? (
+                                    <LoadingComponent />
+                                ) : error ? (
+                                    <div>Error: {error}</div>
+                                ) : posts.length === 0 ? (
+                                    <div>
+                                        <img src={noPostsGif} alt="No posts available" style={{ width: '20%', margin: 'auto', display: 'block' }} />
+                                        <h3 style={styles.alertTextStyle}>No posts available</h3>
+                                    </div>
+                                ) : (
+                                    <div style={scrollableStyle}>
+                                        <BlogPostsComponent posts={posts} />
+                                    </div>
+                                )}
+                            </div>
+                        </main>
+                    </div>
+                </div>
+            );
+        };
+
+        ReactDOM.render(<App />, document.getElementById("root"));
+
+
+    </script>
+</body>
+
+</html>
